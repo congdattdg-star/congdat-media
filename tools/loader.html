@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><title>loader</title>
+<script>
+window.addEventListener('message', async e => {
+  const d = e.data || {};
+  if (!d.cdFetch) return;
+  try {
+    const r = await fetch(d.cdFetch);
+    const b = await r.blob();
+    e.source.postMessage({cdName: d.name, blob: b, status: r.status}, '*');
+  } catch (err) {
+    e.source.postMessage({cdName: d.name, error: String(err)}, '*');
+  }
+});
+parent.postMessage({cdReady: true}, '*');
+</script>
